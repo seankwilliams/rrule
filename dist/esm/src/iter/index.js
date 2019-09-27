@@ -54,7 +54,7 @@ export function iter(iterResult, options) {
                     if (until && res > until) {
                         return emitResult(iterResult);
                     }
-                    if (res >= dtstart) {
+                    if (res >= dtstart && (count || iterResult.method !== 'between' || res >= new Date(iterResult.minDate.getTime() - 24 * 60 * 60 * 1000))) {
                         var rezonedDate = rezoneIfNeeded(res, options);
                         if (!iterResult.accept(rezonedDate)) {
                             return emitResult(iterResult);

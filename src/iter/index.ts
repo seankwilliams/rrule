@@ -77,7 +77,8 @@ export function iter <M extends QueryMethodTypes> (iterResult: IterResult<M>, op
             return emitResult(iterResult)
           }
 
-          if (res >= dtstart) {
+          //we are checking for res >= yesterday so that any weirdness with time zones or DST is addressed: I don't actually know if there is a problem with that, this code is just in case
+          if (res >= dtstart && (count || iterResult.method !== 'between' || res >= new Date(iterResult.minDate!.getTime() - 24 * 60 * 60 * 1000))) {
             const rezonedDate = rezoneIfNeeded(res, options)
             if (!iterResult.accept(rezonedDate)) {
               return emitResult(iterResult)
